@@ -1,1 +1,0 @@
-# Programatically-delete-Google-Play-entitlements-
