@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Android Enterprise public application entitlements are managed by Google. Once an app has been entitled for a user, it will remain entitled across all their devices. 
     In the case that this app is moved from Public management to Internal management, the public Entitlement will remain. 
@@ -20,6 +20,7 @@
     2) User must modify parentlocationgroupid in the sqltext where device details are obtained
     3) User must have SQL account with remote access privileges
     4) Android Enterprise must be configured in the WS1 UEM Console
+    5) Uncomment line 189 when ready to execute after testing (starts with $result - it is commented out for safety)
 
     More Info:
     1) The only required input parameter is for the applicatoin bundle id. This must be provided in the format com.application.bundle.id
@@ -137,11 +138,12 @@ write-output "1..."
 
 #Setup API headers
 $APIUrlBase = "https://www.googleapis.com/androidenterprise/v1/enterprises/"+$EnterpriseID+"/users/"
+$APITestURL = "https://www.googleapis.com/androidenterprise/v1/enterprises/"+$EnterpriseID
 $header = @{"Authorization" = "Bearer " + $token.AccessToken} 
 
 #Test Google API to validate current OAuth token
 Try{
-    $testConnection = invoke-restmethod -uri https://www.googleapis.com/androidenterprise/v1/enterprises/LC00vqtoor -Headers $header -method Get
+    $testConnection = invoke-restmethod -uri $APITestURL -Headers $header -method Get
     write-host $testConnection
     }
 Catch{
@@ -211,5 +213,5 @@ foreach ($line in $sqlOutput) {
 
 write-host Successfully deprovisioned $app for $count devices
 write-host There were $ErrorCount failures
-$SuccessSerialNumbers | export-csv "Success Report.csv" -NoTypeInformation -Encoding UTF8 -Delimiter ','
-$FailSerialNumbers | export-csv "Fail Report.csv" -NoTypeInformation -Encoding UTF8 -Delimiter ','
+$SuccessSerialNumbers | export-csv "$app Success Report.csv" -NoTypeInformation -Encoding UTF8 -Delimiter ','
+$FailSerialNumbers | export-csv "$app Fail Report.csv" -NoTypeInformation -Encoding UTF8 -Delimiter ','
