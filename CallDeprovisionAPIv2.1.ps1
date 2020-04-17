@@ -113,7 +113,7 @@ $sqlTextToken = "SELECT AccessToken from mobilemanagement.AndroidWorkSetting whe
 $sqlTextEID = "SELECT EnterpriseID from mobilemanagement.AndroidWorkSetting where locationgroupid = "+$customerOG
 $sqlTextDevices = "select friendlyname, serialnumber, googleuserid, parentlocationgroupid
 from dbo.devicegoogleidmap g inner join dbo.device d on g.deviceid = d.deviceid 
-inner join dbo.locationgroupflat l on l.childlocationgroupid = d.locationid
+inner join dbo.locationgroupflat l on l.childlocationgroupid = d.locationgroupid
 where parentlocationgroupid = "+$targetParentOG
 
 #Call SQL function to obtain Access Token and Enterprise ID 
